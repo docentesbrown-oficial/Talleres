@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Inscripción Talleres | Docentes Brown</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@700;800&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #24496e;      
+            --secondary: #4d3069;    
+            --bg-color: #f5f1dc;     
+            --text-dark: #333;
+            --white: #ffffff;
+            --shadow-soft: 0 4px 15px rgba(0,0,0,0.05);
+            --radius: 16px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent;}
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            padding: 15px;
+            max-width: 500px; 
+            margin: 0 auto;
+            padding-bottom: 80px;
+        }
+
+        h1, h2, h3 { color: var(--primary); margin-bottom: 8px; line-height: 1.2; }
+
+        /* --- UI COMPONENTS --- */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(255,255,255,0.6);
+            position: relative;
+        }
+
+        .card-workshop-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            font-size: 0.95rem;
+            transition: transform 0.1s;
+            text-decoration: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn:active { transform: scale(0.97); }
+
+        .btn-primary { background-color: var(--primary); color: white; }
+        .btn-secondary { background-color: var(--secondary); color: white; }
+        .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); box-shadow: none; }
+        .btn-waitlist { background-color: #e67e22; color: white; width: 100%; }
+        .btn-danger { background-color: #c0392b; color: white; }
+
+        .btn-group { display: flex; gap: 10px; margin-top: 15px; }
+        .btn-group .btn { margin-top: 0; flex: 1; }
+
+        /* --- CABECERA --- */
+        header { text-align: center; margin-bottom: 25px; margin-top: 15px; }
+        header h1 { 
+            font-family: 'League Spartan', sans-serif; 
+            font-size: clamp(1.8rem, 10vw, 3rem); 
+            font-weight: 800; 
+            color: var(--primary); 
+            margin-bottom: -2px;
+            letter-spacing: -1px;
+            white-space: nowrap; 
+        }
+
+        /* --- EVENTOS --- */
+        .event-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 10px 0;
+            font-size: 0.9rem;
+            background: #f4f6f9;
+            padding: 12px;
+            border-radius: 10px;
+        }
+        .detail-item { display: flex; align-items: center; font-weight: 500; color: #555; }
+        .detail-item i { color: var(--primary); margin-right: 8px; width: 16px; text-align: center; }
+        
+        .cupos-badge {
+            background: #e0e7ff;
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            float: right;
+        }
+
+        /* --- PANEL DE EDICIÓN ADMIN --- */
+        .admin-edit-panel {
+            margin-top: 15px;
+            padding: 10px;
+            background: #fff3cd; 
+            border: 1px dashed #e67e22;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.8rem;
+        }
+        .admin-input {
+            width: 60px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        /* --- RESEÑAS --- */
+        .review-section h3 { color: var(--secondary) !important; }
+        .review-input {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            background: #fdfdfd;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        .review-input:focus { outline: 2px solid var(--secondary); border-color: transparent; }
+
+        .reviews-container-title {
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--secondary);
+            padding-left: 10px;
+            opacity: 0.8;
+        }
+
+        .review-item-bubble {
+            background: white;
+            padding: 18px 20px;
+            border-radius: 20px 20px 20px 4px; 
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            font-style: italic;
+            color: #555;
+            box-shadow: 0 3px 10px rgba(77, 48, 105, 0.08);
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.8);
+            animation: fadeIn 0.5s ease;
+        }
+        .review-item-bubble::after {
+            content: '\f10e';
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            top: 10px; right: 15px;
+            font-size: 1.5rem;
+            color: var(--secondary);
+            opacity: 0.1;
+            pointer-events: none; 
+        }
+
+        .btn-delete-review {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #c0392b;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- MODALES --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 400px;
+            text-align: left;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            animation: slideUp 0.3s ease;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        /* Estilos para el texto de información dentro del modal */
+        #modalInfoContent {
+            white-space: pre-line; /* Respeta los saltos de línea del textarea */
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #444;
+        }
+
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* --- UTILS --- */
+        footer { margin-top: 40px; text-align: center; font-size: 0.75rem; opacity: 0.5; cursor: pointer; padding-bottom: 20px;}
+        .loader { text-align: center; padding: 20px; color: var(--primary); display: none; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>DOCENTES BROWN</h1>
+        <p style="font-size: 1rem; font-weight: 500; margin-top: 5px;">Formación y debate pedagógico</p>
+    </header>
+
+    <div id="events-container">
+        <div class="loader" id="loader"><i class="fas fa-spinner fa-spin"></i> Buscando fechas disponibles...</div>
+    </div>
+
+    <section class="card review-section" style="margin-top: 30px;">
+        <h3>Dejá tu reseña</h3>
+        <p style="font-size: 0.85rem; margin-bottom: 15px;">Tu opinión nos ayuda a crecer.</p>
+        <textarea id="reviewText" class="review-input" rows="3" placeholder="Escribí tu comentario..."></textarea>
+        <button class="btn btn-secondary" onclick="addReview()">Enviar reseña</button>
+    </section>
+
+    <div class="reviews-container-title">Comentarios de la comunidad</div>
+    <div id="reviews-list"></div>
+
+    <div class="modal-overlay" id="infoModal">
+        <div class="modal-content">
+            <h3 style="color:var(--primary); margin-bottom:10px;">Detalle del Taller</h3>
+            
+            <h4 id="modalInfoTitle" style="font-size:1.1rem; color:#333; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;"></h4>
+            
+            <div id="modalInfoContent"></div>
+            
+            <button class="btn btn-outline" onclick="closeModal()" style="margin-top: 20px;">Cerrar</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="adminModal">
+        <div class="modal-content" style="text-align:center;">
+            <h3>Panel Admin</h3>
+            <input type="password" id="adminPass" class="review-input" placeholder="Clave de administrador" style="text-align:center;">
+            <button class="btn btn-secondary" onclick="verifyAdmin()">Ingresar</button>
+            
+            <div id="adminControls" style="display:none; text-align: left; margin-top: 20px;">
+                <hr style="margin: 15px 0;">
+                <h4 style="margin-bottom:10px;">Crear Nuevo Taller</h4>
+                
+                <div style="display: grid; gap: 8px;">
+                    <label style="font-size:0.8rem; font-weight:bold; color:var(--primary); margin-bottom:-5px;">Nombre del Taller:</label>
+                    <input type="text" id="newTitle" class="review-input" placeholder="Ej: Cómo concursar..." style="margin:0;">
+                    
+                    <label style="font-size:0.8rem; font-weight:bold; color:var(--primary); margin-bottom:-5px;">Descripción (+Info):</label>
+                    <textarea id="newDescription" class="review-input" rows="4" placeholder="Escribe aquí toda la info detallada..." style="margin:0;"></textarea>
+
+                    <label style="font-size:0.8rem; font-weight:bold; color:var(--primary); margin-bottom:-5px; margin-top:5px;">Datos de la fecha:</label>
+                    <input type="text" id="newDate" class="review-input" placeholder="Fecha (ej: 26/12 - 17hs)" style="margin:0;">
+                    <input type="text" id="newMode" class="review-input" placeholder="Modalidad (ej: Meet)" style="margin:0;">
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                        <input type="number" id="newPrice" class="review-input" placeholder="$ Precio" style="margin:0;">
+                        <input type="number" id="newSlots" class="review-input" placeholder="Cupos" style="margin:0;">
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="createNewEvent()" style="margin-top: 15px;">Publicar Taller</button>
+                <p id="adminMsg" style="color:green; font-size:0.8rem; margin-top:10px; text-align:center;"></p>
+                <br>
+                <p style="font-size:0.7rem; color:grey;">* Cierra para editar cupos o borrar reseñas.</p>
+            </div>
+            <button class="btn btn-outline" onclick="closeModal()" style="margin-top: 10px; border:none; color:#888;">Cerrar</button>
+        </div>
+    </div>
+
+    <footer onclick="openAdmin()">
+        <p>&copy; 2025 Docentes Brown | <span>Acceso Admin</span></p>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics.js";
+        import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+
+        // CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyAHiXlrWFfeaaCT8CI43SahIBAK8xUSVmM",
+            authDomain: "taller-docentes-brown.firebaseapp.com",
+            projectId: "taller-docentes-brown",
+            storageBucket: "taller-docentes-brown.firebasestorage.app",
+            messagingSenderId: "404954017096",
+            appId: "1:404954017096:web:1dba242decdd999a17577d",
+            measurementId: "G-52HS951LNL"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app); 
+        const db = getFirestore(app);        
+
+        // ESTADO GLOBAL
+        let isAdminMode = false;
+        let currentReviewsSnapshot = null;
+        let eventsCache = {}; // Guardamos los datos de eventos para usar en el modal
+
+        // --- CARGA DE EVENTOS ---
+        const eventsContainer = document.getElementById('events-container');
+        const loader = document.getElementById('loader');
+
+        function loadEvents() {
+            loader.style.display = 'block';
+            const q = query(collection(db, "events"), orderBy("dateString", "asc")); 
+
+            onSnapshot(q, (querySnapshot) => {
+                loader.style.display = 'none';
+                eventsContainer.innerHTML = ''; 
+                eventsCache = {}; // Limpiar caché al actualizar
+
+                if(querySnapshot.empty) {
+                    eventsContainer.innerHTML = '<p style="text-align:center; opacity:0.6; padding:20px;">No hay fechas disponibles por el momento.</p>';
+                    return;
+                }
+
+                querySnapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    eventsCache[docSnap.id] = data; // Guardar en memoria para el modal
+                    renderEventCard(docSnap.id, data);
+                });
+            });
+        }
+
+        function renderEventCard(id, data) {
+            const isFull = data.slots <= 0;
+            // Si no tiene título (eventos viejos), usar un default
+            const displayTitle = data.title || "Taller Docente"; 
+
+            let actionsHtml = '';
+            
+            if (isFull) {
+                actionsHtml = `
+                    <button class="btn btn-waitlist" onclick="goToWaitlist()">
+                         <i class="fas fa-clipboard-list"></i> Lista de Espera
+                    </button>`;
+            } else {
+                // Pasamos el ID para buscar la info en eventsCache
+                actionsHtml = `
+                    <div class="btn-group">
+                        <button class="btn btn-outline" onclick="openInfoModal('${id}')">+ Info</button>
+                        <button class="btn btn-primary" onclick="goToWhatsApp('${id}')">Anotarse</button>
+                    </div>`;
+            }
+
+            let adminHtml = '';
+            if (isAdminMode) {
+                adminHtml = `
+                    <div class="admin-edit-panel">
+                        <strong>Admin:</strong>
+                        <input type="number" id="slots-${id}" value="${data.slots}" class="admin-input" placeholder="Cupos">
+                        <button class="btn btn-primary" style="margin:0; padding:5px; font-size:0.75rem;" onclick="updateEventSlots('${id}')">Guardar</button>
+                        <button class="btn btn-danger" style="margin:0; padding:5px; font-size:0.75rem;" onclick="deleteEvent('${id}')"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+            }
+
+            const cardHtml = `
+                <div class="card">
+                    <div class="card-workshop-title">${displayTitle}</div>
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <h3 style="margin:0; font-size:1.1rem; color:#333;">${data.dateString}</h3>
+                        <span class="cupos-badge">${isFull ? 'AGOTADO' : data.slots + ' libres'}</span>
+                    </div>
+                    
+                    <div class="event-details">
+                        <div class="detail-item"><i class="fas fa-video"></i> ${data.mode}</div>
+                        <div class="detail-item"><i class="fas fa-tag"></i> $${data.price}</div>
+                    </div>
+                    
+                    ${actionsHtml}
+                    ${adminHtml}
+                </div>
+            `;
+            eventsContainer.insertAdjacentHTML('beforeend', cardHtml);
+        }
+
+        // --- FUNCIONES GLOBALES ---
+
+        // Abrir modal con info dinámica
+        window.openInfoModal = (eventId) => { 
+            const eventData = eventsCache[eventId];
+            if (eventData) {
+                const title = eventData.title || "Detalle del Taller";
+                const desc = eventData.description || "No hay información adicional disponible.";
+                
+                document.getElementById('modalInfoTitle').textContent = title;
+                document.getElementById('modalInfoContent').textContent = desc; // textContent respeta saltos de línea con white-space: pre-line
+                document.getElementById('infoModal').style.display = 'flex';
+            }
+        };
+
+        window.closeModal = () => {
+            document.getElementById('infoModal').style.display = 'none';
+            document.getElementById('adminModal').style.display = 'none';
+        };
+        window.goToWaitlist = () => { window.open('https://docs.google.com/forms/d/e/1FAIpQLSeS-5AIq_yWeyOFw6RIJtHLk4_D4rIEjDcjrF4LtF_DSgPC6w/viewform?usp=header', '_blank'); };
+
+        window.goToWhatsApp = (eventId) => {
+            const eventData = eventsCache[eventId];
+            if (!eventData) return;
+            
+            // NUMERO ACTUALIZADO
+            const phone = "5491153196358"; 
+            const title = eventData.title || "Taller";
+            const date = eventData.dateString || "";
+
+            const text = `Hola Docentes Brown. Quiero anotarme en el taller "${title}", en la fecha ${date}.`;
+            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, '_blank');
+        };
+
+        // --- RESEÑAS ---
+        window.addReview = async () => {
+            const text = document.getElementById('reviewText').value;
+            if (!text.trim()) return alert("Por favor escribí algo.");
+            try {
+                await addDoc(collection(db, "reviews"), { text: text, timestamp: serverTimestamp() });
+                document.getElementById('reviewText').value = '';
+                alert("¡Gracias por tu mensaje!");
+            } catch (error) { console.error("Error", error); }
+        };
+
+        function renderReviews() {
+            if (!currentReviewsSnapshot) return;
+            const list = document.getElementById('reviews-list');
+            list.innerHTML = '';
+            
+            currentReviewsSnapshot.forEach(docSnap => {
+                let deleteBtn = '';
+                if (isAdminMode) {
+                    deleteBtn = `<button class="btn-delete-review" onclick="deleteReview('${docSnap.id}')"><i class="fas fa-trash"></i></button>`;
+                }
+
+                list.innerHTML += `
+                    <div class="review-item-bubble">
+                        "${docSnap.data().text}"
+                        ${deleteBtn}
+                    </div>`;
+            });
+        }
+
+        const qReviews = query(collection(db, "reviews"), orderBy("timestamp", "desc"));
+        onSnapshot(qReviews, (snapshot) => {
+            currentReviewsSnapshot = snapshot;
+            renderReviews(); 
+        });
+
+        window.deleteReview = async (id) => {
+            if(confirm("¿Seguro que querés eliminar este comentario?")) {
+                try {
+                    await deleteDoc(doc(db, "reviews", id));
+                } catch (e) { alert("Error al eliminar: " + e.message); }
+            }
+        };
+
+        // --- ADMIN ---
+        window.openAdmin = () => { document.getElementById('adminModal').style.display = 'flex'; };
+
+        window.verifyAdmin = () => {
+            const pass = document.getElementById('adminPass').value;
+            if (pass === "Brown2025") { 
+                isAdminMode = true; 
+                alert("¡Modo Admin Activado! Ahora puedes borrar comentarios, editar fechas y agregar talleres.");
+                document.getElementById('adminControls').style.display = 'block';
+                document.getElementById('adminPass').style.display = 'none';
+                
+                loadEvents(); 
+                renderReviews(); 
+            } else {
+                alert("Clave incorrecta");
+            }
+        };
+
+        window.createNewEvent = async () => {
+            // Capturar datos nuevos
+            const title = document.getElementById('newTitle').value;
+            const description = document.getElementById('newDescription').value;
+            const date = document.getElementById('newDate').value;
+            const mode = document.getElementById('newMode').value;
+            const price = document.getElementById('newPrice').value;
+            const slots = document.getElementById('newSlots').value;
+
+            if(!title || !date) return alert("El Título y la Fecha son obligatorios.");
+
+            try {
+                await addDoc(collection(db, "events"), {
+                    title: title,            // Guardamos el título
+                    description: description, // Guardamos la info detallada
+                    dateString: date,
+                    mode: mode || "A confirmar",
+                    price: price || "0",
+                    slots: parseInt(slots) || 0
+                });
+                document.getElementById('adminMsg').textContent = "¡Taller Publicado!";
+                setTimeout(() => document.getElementById('adminMsg').textContent = "", 3000);
+                
+                // Limpiar todo
+                document.getElementById('newTitle').value = "";
+                document.getElementById('newDescription').value = "";
+                document.getElementById('newDate').value = "";
+                document.getElementById('newSlots').value = "";
+            } catch (e) { alert("Error: " + e.message); }
+        };
+
+        window.updateEventSlots = async (id) => {
+            const newSlots = document.getElementById(`slots-${id}`).value;
+            try {
+                await updateDoc(doc(db, "events", id), { slots: parseInt(newSlots) });
+                alert("Cupos actualizados correctamente");
+            } catch (e) { alert("Error al actualizar: " + e.message); }
+        };
+
+        window.deleteEvent = async (id) => {
+            if(confirm("¿Seguro que querés borrar este taller?")) {
+                try {
+                    await deleteDoc(doc(db, "events", id));
+                } catch (e) { alert("Error al borrar: " + e.message); }
+            }
+        };
+
+        loadEvents();
+    </script>
+</body>
+</html>
